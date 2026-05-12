@@ -1,0 +1,1669 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>NudgeOps — AI Automation Systems for Recruitment Agencies</title>
+<meta name="description" content="NudgeOps builds AI automation systems for recruitment agencies. Handle the application tsunami, automate CV screening, and fill roles faster. Live in 14 days.">
+<style>
+*, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+
+/* ── TOKENS: Apple design guidelines (unchanged) ── */
+:root {
+  --bg-light:            #F5F5F7;
+  --bg-white:            #FFFFFF;
+  --bg-dark:             #0A2540; /* Stripe navy replaces pure black — still dark section */
+  --bg-mid-dark:         #1D1D1F;
+  --text-headline-dark:  #1D1D1F;
+  --text-headline-light: #F5F5F7;
+  --text-body-dark:      #6E6E73;
+  --text-body-light:     #A1A1A6;
+  --text-link:           #0071E3;
+  --btn-blue-bg:         #0071E3;
+  --btn-blue-text:       #FFFFFF;
+  --btn-light-bg:        #F5F5F7;
+  --btn-light-text:      #1D1D1F;
+  --nav-border:          rgba(0,0,0,0.08);
+  --nav-bg:              rgba(255,255,255,0.8);
+  --radius-tile:         18px;
+  --radius-btn:          980px;
+  --max-width:           980px;
+  /* Stripe additions */
+  --stripe-card-border-dark:  rgba(255,255,255,0.1);
+  --stripe-card-border-light: rgba(0,0,0,0.08);
+  --stripe-card-hover-border: rgba(255,255,255,0.22);
+}
+
+html { scroll-behavior: smooth; }
+
+body {
+  font-family: -apple-system, BlinkMacSystemFont, 'Helvetica Neue', Helvetica, Arial, sans-serif;
+  background: var(--bg-light);
+  color: var(--text-headline-dark);
+  font-size: 17px;
+  line-height: 1.47;
+  -webkit-font-smoothing: antialiased;
+}
+
+a { color: inherit; text-decoration: none; }
+
+.container {
+  max-width: var(--max-width);
+  margin: 0 auto;
+  padding: 0 22px;
+}
+
+/* ── NAV: Apple frosted glass, 44px, 12px links ── */
+nav {
+  position: fixed;
+  top: 0; left: 0; right: 0;
+  z-index: 200;
+  height: 44px;
+  display: flex;
+  align-items: center;
+  background: var(--nav-bg);
+  backdrop-filter: saturate(180%) blur(20px);
+  -webkit-backdrop-filter: saturate(180%) blur(20px);
+  border-bottom: 1px solid var(--nav-border);
+  transition: background 0.3s ease;
+}
+
+nav.dark-nav {
+  background: rgba(10,37,64,0.88);
+  border-bottom-color: rgba(255,255,255,0.08);
+}
+
+.nav-inner {
+  max-width: var(--max-width);
+  margin: 0 auto;
+  padding: 0 22px;
+  width: 100%;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+}
+
+.nav-logo {
+  font-size: 21px;
+  font-weight: 600;
+  color: var(--text-headline-dark);
+  letter-spacing: -0.01em;
+  transition: color 0.3s ease;
+}
+
+nav.dark-nav .nav-logo { color: var(--text-headline-light); }
+nav.dark-nav .nav-links a:not(.nav-cta) { color: var(--text-headline-light); }
+
+.nav-links {
+  display: flex;
+  align-items: center;
+  gap: 28px;
+}
+
+.nav-links a {
+  font-size: 12px;
+  font-weight: 400;
+  color: var(--text-headline-dark);
+  transition: opacity 0.3s ease;
+}
+
+.nav-links a:hover { opacity: 0.6; }
+
+.nav-cta {
+  background: var(--btn-blue-bg) !important;
+  color: var(--btn-blue-text) !important;
+  padding: 6px 14px;
+  border-radius: var(--radius-btn);
+  font-size: 12px !important;
+  font-weight: 400 !important;
+  transition: opacity 0.3s ease !important;
+}
+
+.nav-cta:hover { opacity: 0.85 !important; }
+
+@media (max-width: 680px) {
+  .nav-links a:not(.nav-cta) { display: none; }
+}
+
+/* ── BUTTONS: Apple pill only ── */
+.btn-blue {
+  display: inline-block;
+  background: var(--btn-blue-bg);
+  color: var(--btn-blue-text);
+  padding: 12px 22px;
+  border-radius: var(--radius-btn);
+  font-size: 17px;
+  font-weight: 400;
+  transition: opacity 0.3s ease;
+  border: none;
+  cursor: pointer;
+}
+.btn-blue:hover { opacity: 0.85; }
+
+.btn-outline-dark {
+  display: inline-block;
+  background: transparent;
+  color: #FFFFFF;
+  padding: 12px 22px;
+  border-radius: var(--radius-btn);
+  font-size: 17px;
+  font-weight: 400;
+  border: 1.5px solid rgba(255,255,255,0.4);
+  transition: opacity 0.3s ease;
+  cursor: pointer;
+}
+.btn-outline-dark:hover { opacity: 0.85; }
+
+.btn-outline-light {
+  display: inline-block;
+  background: transparent;
+  color: var(--text-headline-dark);
+  padding: 12px 22px;
+  border-radius: var(--radius-btn);
+  font-size: 17px;
+  font-weight: 400;
+  border: 1.5px solid rgba(0,0,0,0.25);
+  transition: opacity 0.3s ease;
+  cursor: pointer;
+}
+.btn-outline-light:hover { opacity: 0.7; }
+
+.btn-row {
+  display: flex;
+  gap: 12px;
+  flex-wrap: wrap;
+  align-items: center;
+}
+
+/* ── HERO: Apple structure + Stripe animated gradient mesh ── */
+.hero {
+  background: var(--bg-dark);
+  min-height: 100vh;
+  display: flex;
+  align-items: center;
+  padding: 100px 0 80px;
+  text-align: center;
+  position: relative;
+  overflow: hidden;
+}
+
+/* Stripe gradient mesh — animated colour blobs */
+.hero-mesh {
+  position: absolute;
+  inset: 0;
+  pointer-events: none;
+  overflow: hidden;
+}
+
+.mesh-blob {
+  position: absolute;
+  border-radius: 50%;
+  filter: blur(80px);
+  opacity: 0.35;
+}
+
+.mesh-blob-1 {
+  width: 600px; height: 600px;
+  background: #1a56db;
+  top: -200px; left: -100px;
+  animation: meshDrift1 12s ease-in-out infinite alternate;
+}
+
+.mesh-blob-2 {
+  width: 500px; height: 500px;
+  background: #0e7490;
+  bottom: -150px; right: -80px;
+  animation: meshDrift2 15s ease-in-out infinite alternate;
+}
+
+.mesh-blob-3 {
+  width: 400px; height: 400px;
+  background: #5b21b6;
+  top: 40%; left: 50%;
+  transform: translate(-50%, -50%);
+  animation: meshDrift3 18s ease-in-out infinite alternate;
+}
+
+@keyframes meshDrift1 {
+  from { transform: translate(0, 0) scale(1); }
+  to   { transform: translate(80px, 60px) scale(1.15); }
+}
+@keyframes meshDrift2 {
+  from { transform: translate(0, 0) scale(1); }
+  to   { transform: translate(-60px, -80px) scale(1.2); }
+}
+@keyframes meshDrift3 {
+  from { transform: translate(-50%, -50%) scale(1); }
+  to   { transform: translate(-40%, -60%) scale(0.85); }
+}
+
+.hero-content { position: relative; z-index: 1; }
+
+/* Stripe italic serif headline mix */
+.hero h1 {
+  font-size: clamp(48px, 6vw, 80px);
+  font-weight: 700;
+  color: var(--text-headline-light);
+  line-height: 1.05;
+  letter-spacing: -0.015em;
+  max-width: 800px;
+  margin: 0 auto 20px;
+}
+
+.hero h1 em {
+  font-style: italic;
+  font-weight: 300;
+  color: rgba(255,255,255,0.75);
+}
+
+.hero-label {
+  font-size: 12px;
+  font-weight: 400;
+  color: var(--text-body-light);
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+  margin-bottom: 16px;
+}
+
+.hero-sub {
+  font-size: 21px;
+  font-weight: 400;
+  color: var(--text-body-light);
+  max-width: 520px;
+  margin: 0 auto 36px;
+  line-height: 1.47;
+}
+
+.hero .btn-row { justify-content: center; }
+
+/* ── STATS TICKER: Stripe scrolling marquee ── */
+.ticker-wrap {
+  background: var(--bg-dark);
+  border-top: 1px solid rgba(255,255,255,0.08);
+  border-bottom: 1px solid rgba(255,255,255,0.08);
+  padding: 16px 0;
+  overflow: hidden;
+  position: relative;
+}
+
+.ticker-wrap::before,
+.ticker-wrap::after {
+  content: '';
+  position: absolute;
+  top: 0; bottom: 0;
+  width: 80px;
+  z-index: 2;
+}
+
+.ticker-wrap::before { left: 0; background: linear-gradient(to right, var(--bg-dark), transparent); }
+.ticker-wrap::after  { right: 0; background: linear-gradient(to left, var(--bg-dark), transparent); }
+
+.ticker-track {
+  display: flex;
+  width: max-content;
+  animation: ticker 30s linear infinite;
+}
+
+.ticker-track:hover { animation-play-state: paused; }
+
+@keyframes ticker {
+  from { transform: translateX(0); }
+  to   { transform: translateX(-50%); }
+}
+
+.ticker-item {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  padding: 0 40px;
+  font-size: 12px;
+  font-weight: 400;
+  color: var(--text-body-light);
+  white-space: nowrap;
+  letter-spacing: 0.04em;
+}
+
+.ticker-item strong {
+  font-size: 17px;
+  font-weight: 600;
+  color: var(--text-headline-light);
+  letter-spacing: -0.01em;
+}
+
+.ticker-sep {
+  width: 4px; height: 4px;
+  border-radius: 50%;
+  background: rgba(255,255,255,0.2);
+  flex-shrink: 0;
+}
+
+/* ── NICHE STRIP ── */
+.niche-strip {
+  background: var(--bg-light);
+  border-bottom: 1px solid var(--nav-border);
+}
+
+.niche-row {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  flex-wrap: wrap;
+}
+
+.niche-item {
+  font-size: 12px;
+  font-weight: 400;
+  color: var(--text-body-dark);
+  padding: 12px 24px;
+  border-right: 1px solid var(--nav-border);
+  letter-spacing: 0.02em;
+}
+
+.niche-item:last-child { border-right: none; }
+
+/* ── SECTION SCAFFOLDING ── */
+.section-light   { background: var(--bg-light);   padding: 100px 0; text-align: center; }
+.section-white   { background: var(--bg-white);   padding: 100px 0; text-align: center; }
+.section-dark    { background: var(--bg-dark);    padding: 100px 0; text-align: center; }
+.section-mid     { background: var(--bg-mid-dark);padding: 100px 0; text-align: center; }
+
+.section-label       { font-size: 12px; font-weight: 400; color: var(--text-body-dark);  letter-spacing: 0.08em; text-transform: uppercase; margin-bottom: 12px; }
+.section-label-light { font-size: 12px; font-weight: 400; color: var(--text-body-light); letter-spacing: 0.08em; text-transform: uppercase; margin-bottom: 12px; }
+
+.h-section-dark  { font-size: clamp(36px,4.5vw,56px); font-weight: 700; color: var(--text-headline-dark);  line-height: 1.07; letter-spacing: -0.015em; margin-bottom: 16px; }
+.h-section-light { font-size: clamp(36px,4.5vw,56px); font-weight: 700; color: var(--text-headline-light); line-height: 1.07; letter-spacing: -0.015em; margin-bottom: 16px; }
+.h-card-dark     { font-size: clamp(24px,2.5vw,32px); font-weight: 600; color: var(--text-headline-dark);  line-height: 1.1;  letter-spacing: -0.01em;  margin-bottom: 8px; }
+.h-card-light    { font-size: clamp(24px,2.5vw,32px); font-weight: 600; color: var(--text-headline-light); line-height: 1.1;  letter-spacing: -0.01em;  margin-bottom: 8px; }
+.body-dark  { font-size: 17px; font-weight: 400; color: var(--text-body-dark);  line-height: 1.47; }
+.body-light { font-size: 17px; font-weight: 400; color: var(--text-body-light); line-height: 1.47; }
+
+/* ── BENTO GRID: Stripe asymmetric layout + card borders ── */
+.bento {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 12px;
+  margin-top: 48px;
+  text-align: left;
+}
+
+@media (max-width: 680px) { .bento { grid-template-columns: 1fr; } }
+
+.bento-card {
+  border-radius: var(--radius-tile);
+  padding: 40px 36px;
+  min-height: 300px;
+  display: flex;
+  flex-direction: column;
+  position: relative;
+  overflow: hidden;
+  /* Stripe card border */
+  border: 1px solid var(--stripe-card-border-dark);
+  /* Stripe card hover lift */
+  transition: transform 0.3s ease, border-color 0.3s ease;
+}
+
+.bento-card:hover {
+  transform: translateY(-4px);
+  border-color: var(--stripe-card-hover-border);
+}
+
+.bento-card.on-light {
+  border-color: var(--stripe-card-border-light);
+  background: var(--bg-white);
+}
+
+.bento-card.on-light:hover {
+  border-color: rgba(0,0,0,0.18);
+}
+
+.bento-card.dark  { background: rgba(255,255,255,0.04); }
+.bento-card.soft  { background: #E8E8ED; }
+.bento-card.wide  { grid-column: 1 / -1; min-height: 200px; }
+
+.bento-tag {
+  font-size: 12px;
+  font-weight: 400;
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+  margin-bottom: 12px;
+}
+
+.bento-tag.light { color: var(--text-body-light); }
+.bento-tag.dark  { color: var(--text-body-dark); }
+
+.bento-card .body-light,
+.bento-card .body-dark { max-width: 340px; margin-bottom: 24px; }
+
+.bento-card .btn-outline-dark,
+.bento-card .btn-outline-light { margin-top: auto; align-self: flex-start; }
+
+/* Stripe top-line shimmer on dark cards */
+.bento-card.dark::before {
+  content: '';
+  position: absolute;
+  top: 0; left: 0; right: 0;
+  height: 1px;
+  background: linear-gradient(90deg, transparent, rgba(255,255,255,0.15), transparent);
+}
+
+/* ── ANIMATED COUNTERS: Stripe count-up ── */
+.counters-section {
+  background: var(--bg-dark);
+  padding: 0;
+  border-top: 1px solid rgba(255,255,255,0.08);
+  border-bottom: 1px solid rgba(255,255,255,0.08);
+}
+
+.counters-grid {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  gap: 1px;
+  background: rgba(255,255,255,0.08);
+}
+
+@media (max-width: 680px) { .counters-grid { grid-template-columns: 1fr; background: none; gap: 0; } }
+
+.counter-cell {
+  background: var(--bg-dark);
+  padding: 56px 24px;
+  text-align: center;
+}
+
+.counter-num {
+  font-size: clamp(36px, 4.5vw, 56px);
+  font-weight: 700;
+  color: var(--text-headline-light);
+  line-height: 1.07;
+  letter-spacing: -0.015em;
+  margin-bottom: 8px;
+  display: block;
+}
+
+.counter-label {
+  font-size: 17px;
+  color: var(--text-body-light);
+}
+
+/* ── STICKY SECTION TABS: Stripe scroll-highlight ── */
+.sticky-tabs {
+  position: sticky;
+  top: 44px;
+  z-index: 100;
+  background: var(--nav-bg);
+  backdrop-filter: saturate(180%) blur(20px);
+  -webkit-backdrop-filter: saturate(180%) blur(20px);
+  border-bottom: 1px solid var(--nav-border);
+}
+
+.sticky-tabs-inner {
+  max-width: var(--max-width);
+  margin: 0 auto;
+  padding: 0 22px;
+  display: flex;
+  gap: 0;
+  overflow-x: auto;
+  scrollbar-width: none;
+}
+
+.sticky-tabs-inner::-webkit-scrollbar { display: none; }
+
+.tab-link {
+  font-size: 12px;
+  font-weight: 400;
+  color: var(--text-body-dark);
+  padding: 12px 20px;
+  white-space: nowrap;
+  border-bottom: 2px solid transparent;
+  transition: color 0.3s ease, border-color 0.3s ease;
+  letter-spacing: 0.02em;
+}
+
+.tab-link:hover { color: var(--text-headline-dark); }
+.tab-link.active { color: var(--btn-blue-bg); border-bottom-color: var(--btn-blue-bg); }
+
+/* ── HOW IT WORKS: 3-column cards ── */
+.three-col {
+  display: grid;
+  grid-template-columns: repeat(3,1fr);
+  gap: 12px;
+  margin-top: 48px;
+  text-align: left;
+}
+
+@media (max-width: 680px) { .three-col { grid-template-columns: 1fr; } }
+
+.col-card {
+  padding: 36px 28px;
+  background: var(--bg-white);
+  border-radius: var(--radius-tile);
+  border: 1px solid var(--stripe-card-border-light);
+  transition: transform 0.3s ease, border-color 0.3s ease;
+}
+
+.col-card:hover {
+  transform: translateY(-4px);
+  border-color: rgba(0,0,0,0.18);
+}
+
+.col-num {
+  font-size: clamp(36px,4.5vw,56px);
+  font-weight: 700;
+  color: rgba(0,0,0,0.06);
+  line-height: 1.07;
+  letter-spacing: -0.015em;
+  margin-bottom: 16px;
+}
+
+/* ── ACCORDION: Stripe expand/collapse for niches ── */
+.accordion { margin-top: 48px; text-align: left; }
+
+.accordion-item {
+  border-bottom: 1px solid var(--stripe-card-border-light);
+}
+
+.accordion-trigger {
+  width: 100%;
+  background: none;
+  border: none;
+  padding: 28px 0;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  cursor: pointer;
+  text-align: left;
+  gap: 16px;
+}
+
+.accordion-trigger:hover .accordion-title { color: var(--btn-blue-bg); }
+
+.accordion-title {
+  font-size: clamp(24px,2.5vw,32px);
+  font-weight: 600;
+  color: var(--text-headline-dark);
+  line-height: 1.1;
+  letter-spacing: -0.01em;
+  transition: color 0.3s ease;
+}
+
+.accordion-icon {
+  width: 28px; height: 28px;
+  border-radius: 50%;
+  border: 1.5px solid rgba(0,0,0,0.2);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  flex-shrink: 0;
+  transition: transform 0.3s ease, border-color 0.3s ease, background 0.3s ease;
+  font-size: 16px;
+  color: var(--text-body-dark);
+}
+
+.accordion-item.open .accordion-icon {
+  transform: rotate(45deg);
+  background: var(--btn-blue-bg);
+  border-color: var(--btn-blue-bg);
+  color: white;
+}
+
+.accordion-body {
+  max-height: 0;
+  overflow: hidden;
+  transition: max-height 0.4s ease;
+}
+
+.accordion-body-inner {
+  padding: 0 0 32px;
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 32px;
+  align-items: start;
+}
+
+@media (max-width: 680px) { .accordion-body-inner { grid-template-columns: 1fr; } }
+
+.accordion-pain-list {
+  list-style: none;
+  margin-top: 16px;
+}
+
+.accordion-pain-list li {
+  font-size: 17px;
+  color: var(--text-body-dark);
+  padding: 8px 0;
+  border-bottom: 1px solid var(--stripe-card-border-light);
+  display: flex;
+  align-items: center;
+  gap: 10px;
+}
+
+.accordion-pain-list li:last-child { border-bottom: none; }
+.accordion-pain-list li::before { content: '—'; color: rgba(0,0,0,0.25); font-size: 14px; }
+
+/* ── TESTIMONIALS: Stripe quote cards ── */
+.quote-grid {
+  display: grid;
+  grid-template-columns: repeat(3,1fr);
+  gap: 12px;
+  margin-top: 48px;
+  text-align: left;
+}
+
+@media (max-width: 680px) { .quote-grid { grid-template-columns: 1fr; } }
+
+.quote-card {
+  background: var(--bg-white);
+  border-radius: var(--radius-tile);
+  padding: 36px 28px;
+  border: 1px solid var(--stripe-card-border-light);
+  transition: transform 0.3s ease, border-color 0.3s ease;
+}
+
+.quote-card:hover {
+  transform: translateY(-4px);
+  border-color: rgba(0,0,0,0.18);
+}
+
+.quote-text {
+  font-size: 17px;
+  color: var(--text-body-dark);
+  line-height: 1.47;
+  margin-bottom: 24px;
+}
+
+.quote-name { font-size: 17px; font-weight: 600; color: var(--text-headline-dark); margin-bottom: 2px; }
+.quote-role { font-size: 12px; color: var(--text-body-dark); }
+
+.quote-logo {
+  margin-bottom: 20px;
+  height: 36px;
+  display: flex;
+  align-items: center;
+}
+
+.quote-logo svg {
+  height: 32px;
+  width: auto;
+  opacity: 0.55;
+}
+
+.quote-logo .logo-text {
+  font-size: 18px;
+  font-weight: 700;
+  letter-spacing: -0.02em;
+  color: var(--text-body-dark);
+  opacity: 0.6;
+}
+
+.quote-stars {
+  display: flex;
+  gap: 2px;
+  margin-bottom: 16px;
+  color: #F5A623;
+  font-size: 14px;
+}
+
+/* Before / After transformation block */
+.quote-transformation {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 8px;
+  margin-bottom: 20px;
+  margin-top: 4px;
+}
+
+.qt-col {
+  border-radius: 10px;
+  padding: 12px 14px;
+}
+
+.qt-before {
+  background: #FFF1F1;
+  border: 1px solid rgba(220,0,0,0.08);
+}
+
+.qt-after {
+  background: #F0FBF4;
+  border: 1px solid rgba(0,160,60,0.1);
+}
+
+.qt-label {
+  font-size: 10px;
+  font-weight: 600;
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+  margin-bottom: 6px;
+}
+
+.qt-before .qt-label { color: #CC3333; }
+.qt-after .qt-label  { color: #1A8C40; }
+
+.qt-text {
+  font-size: 13px;
+  line-height: 1.4;
+  color: var(--text-headline-dark);
+  font-weight: 500;
+}
+
+/* ── TRUSTED BY: logo strip ── */
+.trusted-strip {
+  background: var(--bg-white);
+  padding: 48px 0;
+  border-top: 1px solid var(--nav-border);
+  border-bottom: 1px solid var(--nav-border);
+  text-align: center;
+}
+
+.trusted-label {
+  font-size: 11px;
+  font-weight: 400;
+  color: var(--text-body-dark);
+  letter-spacing: 0.1em;
+  text-transform: uppercase;
+  margin-bottom: 28px;
+  opacity: 0.6;
+}
+
+.trusted-logos {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  gap: 48px;
+  flex-wrap: wrap;
+}
+
+.trusted-logo-item {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  opacity: 0.45;
+  transition: opacity 0.3s ease;
+  filter: grayscale(1);
+}
+
+.trusted-logo-item:hover {
+  opacity: 0.75;
+  filter: grayscale(0);
+}
+
+.trusted-logo-item .logo-wordmark {
+  font-size: 16px;
+  font-weight: 700;
+  color: var(--text-headline-dark);
+  letter-spacing: -0.02em;
+  white-space: nowrap;
+}
+
+.trusted-logo-item .logo-icon {
+  width: 28px;
+  height: 28px;
+  flex-shrink: 0;
+}
+
+/* ── SCROLL REVEAL: Stripe fade-up on scroll ── */
+.reveal {
+  opacity: 0;
+  transform: translateY(24px);
+  transition: opacity 0.6s ease, transform 0.6s ease;
+}
+
+.reveal.visible {
+  opacity: 1;
+  transform: translateY(0);
+}
+
+/* ── TOOLS STRIP ── */
+.tools-strip {
+  background: var(--bg-dark);
+  padding: 72px 0;
+  border-top: 1px solid rgba(255,255,255,0.06);
+  border-bottom: 1px solid rgba(255,255,255,0.06);
+  text-align: center;
+}
+
+.tools-label {
+  font-size: 12px;
+  font-weight: 400;
+  color: var(--text-body-light);
+  letter-spacing: 0.1em;
+  text-transform: uppercase;
+  margin-bottom: 40px;
+  opacity: 0.5;
+}
+
+.tools-grid {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  gap: 16px;
+  flex-wrap: wrap;
+  max-width: 860px;
+  margin: 0 auto;
+}
+
+.tool-card {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 10px;
+  background: rgba(255,255,255,0.05);
+  border: 1px solid rgba(255,255,255,0.1);
+  border-radius: 16px;
+  padding: 20px 18px 16px;
+  width: 100px;
+  transition: background 0.3s ease, border-color 0.3s ease, transform 0.3s ease;
+}
+
+.tool-card:hover {
+  background: rgba(255,255,255,0.09);
+  border-color: rgba(255,255,255,0.22);
+  transform: translateY(-3px);
+}
+
+.tool-card-icon {
+  width: 48px;
+  height: 48px;
+  border-radius: 12px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  flex-shrink: 0;
+}
+
+.tool-card-name {
+  font-size: 12px;
+  font-weight: 500;
+  color: rgba(255,255,255,0.65);
+  white-space: nowrap;
+  text-align: center;
+}
+
+/* ── FAQ ── */
+.faq-section {
+  background: var(--bg-light);
+  padding: 100px 0;
+}
+
+.faq-grid {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 12px;
+  margin-top: 48px;
+  text-align: left;
+}
+
+@media (max-width: 680px) { .faq-grid { grid-template-columns: 1fr; } }
+
+.faq-item {
+  background: var(--bg-white);
+  border-radius: var(--radius-tile);
+  border: 1px solid var(--stripe-card-border-light);
+  overflow: hidden;
+  transition: border-color 0.3s ease;
+}
+
+.faq-item:hover { border-color: rgba(0,0,0,0.16); }
+
+.faq-trigger {
+  width: 100%;
+  background: none;
+  border: none;
+  padding: 24px 28px;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  cursor: pointer;
+  text-align: left;
+  gap: 16px;
+}
+
+.faq-question {
+  font-size: 17px;
+  font-weight: 600;
+  color: var(--text-headline-dark);
+  line-height: 1.3;
+}
+
+.faq-icon {
+  width: 24px;
+  height: 24px;
+  border-radius: 50%;
+  border: 1.5px solid rgba(0,0,0,0.15);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  flex-shrink: 0;
+  font-size: 14px;
+  color: var(--text-body-dark);
+  transition: transform 0.3s ease, background 0.3s ease, border-color 0.3s ease;
+}
+
+.faq-item.open .faq-icon {
+  transform: rotate(45deg);
+  background: var(--btn-blue-bg);
+  border-color: var(--btn-blue-bg);
+  color: white;
+}
+
+.faq-body {
+  max-height: 0;
+  overflow: hidden;
+  transition: max-height 0.35s ease;
+}
+
+.faq-body-inner {
+  padding: 0 28px 24px;
+  font-size: 15px;
+  color: var(--text-body-dark);
+  line-height: 1.6;
+}
+
+/* ── FOOTER ── */
+footer {
+  background: var(--bg-light);
+  border-top: 1px solid var(--nav-border);
+  padding: 48px 0 24px;
+}
+
+.footer-nav { display: flex; gap: 28px; flex-wrap: wrap; margin-bottom: 32px; }
+.footer-nav a { font-size: 12px; color: var(--text-body-dark); transition: opacity 0.3s ease; }
+.footer-nav a:hover { opacity: 0.6; }
+
+.footer-copy {
+  font-size: 12px;
+  color: var(--text-body-dark);
+  border-top: 1px solid var(--nav-border);
+  padding-top: 20px;
+  display: flex;
+  justify-content: space-between;
+  flex-wrap: wrap;
+  gap: 8px;
+}
+
+.text-link { color: var(--text-link); transition: opacity 0.3s ease; }
+.text-link:hover { opacity: 0.7; }
+</style>
+</head>
+<body>
+
+<!-- ── NAV ── -->
+<nav id="main-nav">
+  <div class="nav-inner">
+    <div class="nav-logo">NudgeOps</div>
+    <div class="nav-links">
+      <a href="#systems">Systems</a>
+      <a href="#how">How it works</a>
+      <a href="#who">Who it's for</a>
+      <a href="https://calendly.com/hello-nudgeops/30min" class="nav-cta">Book a free call</a>
+    </div>
+  </div>
+</nav>
+
+<!-- ── HERO: Apple structure + Stripe animated gradient mesh + italic headline ── -->
+<section class="hero" id="top">
+  <div class="hero-mesh">
+    <div class="mesh-blob mesh-blob-1"></div>
+    <div class="mesh-blob mesh-blob-2"></div>
+    <div class="mesh-blob mesh-blob-3"></div>
+  </div>
+  <div class="container hero-content">
+    <p class="hero-label">Built for recruitment agencies</p>
+    <h1>Your recruiters are drowning<br>in <em>AI-generated CVs.</em></h1>
+    <p class="hero-sub">We build systems that screen, score and respond to candidates automatically — so your team focuses only on placements, not admin.</p>
+    <div class="btn-row">
+      <a href="https://calendly.com/hello-nudgeops/30min" class="btn-blue">Book a free call</a>
+      <a href="#systems" class="btn-outline-dark">See what we build</a>
+    </div>
+    <p style="font-size:13px;margin-top:16px;color:rgba(255,255,255,0.4);">Takes 30 minutes. We'll show you the exact fix for your business.</p>
+  </div>
+</section>
+
+<!-- ── TICKER: Stripe scrolling stats marquee ── -->
+<div class="ticker-wrap">
+  <div class="ticker-track" id="ticker">
+    <div class="ticker-item"><strong>14 days</strong><span>to go live</span></div>
+    <div class="ticker-sep"></div>
+    <div class="ticker-item"><strong>60-day</strong><span>ROI guarantee</span></div>
+    <div class="ticker-sep"></div>
+    <div class="ticker-item"><strong>0</strong><span>new tools to learn</span></div>
+    <div class="ticker-sep"></div>
+    <div class="ticker-item"><strong>100%</strong><span>done-for-you build</span></div>
+    <div class="ticker-sep"></div>
+    <div class="ticker-item"><strong>4 systems</strong><span>the complete recruitment stack</span></div>
+    <div class="ticker-sep"></div>
+    <div class="ticker-item"><strong>1 niche</strong><span>built for recruitment agencies</span></div>
+    <div class="ticker-sep"></div>
+    <!-- duplicate for seamless loop -->
+    <div class="ticker-item"><strong>14 days</strong><span>to go live</span></div>
+    <div class="ticker-sep"></div>
+    <div class="ticker-item"><strong>60-day</strong><span>ROI guarantee</span></div>
+    <div class="ticker-sep"></div>
+    <div class="ticker-item"><strong>0</strong><span>new tools to learn</span></div>
+    <div class="ticker-sep"></div>
+    <div class="ticker-item"><strong>100%</strong><span>done-for-you build</span></div>
+    <div class="ticker-sep"></div>
+    <div class="ticker-item"><strong>4 systems</strong><span>the complete recruitment stack</span></div>
+    <div class="ticker-sep"></div>
+    <div class="ticker-item"><strong>1 niche</strong><span>built for recruitment agencies</span></div>
+    <div class="ticker-sep"></div>
+  </div>
+</div>
+
+<!-- ── NICHE STRIP ── -->
+<div class="niche-strip">
+  <div class="container">
+    <div class="niche-row">
+      <div class="niche-item">Recruitment Agencies</div>
+      <div class="niche-item">Online Coaches</div>
+      <div class="niche-item">Digital Agencies</div>
+      <div class="niche-item">Consultants</div>
+      <div class="niche-item">Service Businesses</div>
+    </div>
+  </div>
+</div>
+
+<!-- ── PROBLEM: Apple section + Stripe bento grid with borders + hover lift ── -->
+<section class="section-light" id="problem">
+  <div class="container">
+    <p class="section-label">The problem</p>
+    <h2 class="h-section-dark">Applications are up 300%.<br>Your team is the same size.</h2>
+    <p class="body-dark" style="max-width:520px;margin:0 auto;">AI-generated CVs are flooding recruitment agencies. Manual screening is no longer possible. Here's where the bottlenecks are.</p>
+    <div class="bento reveal">
+      <div class="bento-card on-light">
+        <p class="bento-tag dark">The application tsunami</p>
+        <h3 class="h-card-dark">Hundreds of CVs.<br>Half are AI-generated.<br>None are screened.</h3>
+        <p class="body-dark">Your recruiters spend hours on CVs that should have been filtered in seconds.</p>
+      </div>
+      <div class="bento-card on-light">
+        <p class="bento-tag dark">Candidates going cold</p>
+        <h3 class="h-card-dark">Great candidate applies.<br>Nobody follows up.<br>They take another offer.</h3>
+        <p class="body-dark">Speed-to-response is everything in recruitment. Manual follow-up is too slow.</p>
+      </div>
+      <div class="bento-card on-light wide">
+        <p class="bento-tag dark">Broken middleware</p>
+        <h3 class="h-card-dark">Your ATS, LinkedIn, email and CRM don't talk to each other.</h3>
+        <p class="body-dark">Recruiters waste hours copying data between systems that should be connected. Every manual update is a placement opportunity lost.</p>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ── STICKY TABS: Stripe scroll-highlighted tab bar ── -->
+<div class="sticky-tabs" id="sticky-tabs">
+  <div class="sticky-tabs-inner">
+    <a href="#systems" class="tab-link" data-section="systems">Systems</a>
+    <a href="#how" class="tab-link" data-section="how">How it works</a>
+    <a href="#who" class="tab-link" data-section="who">Who it's for</a>
+    <a href="#faq" class="tab-link" data-section="faq">FAQ</a>
+  </div>
+</div>
+
+<!-- ── SYSTEMS: Apple dark section + Stripe bento + borders + hover lift ── -->
+<section class="section-dark" id="systems">
+  <div class="container">
+    <p class="section-label-light">What we build</p>
+    <h2 class="h-section-light">Four systems.<br>The complete recruitment stack.</h2>
+    <p class="body-light" style="max-width:480px;margin:0 auto;">Done-for-you. Live in 14 days. Built around the tools you already use.</p>
+    <div class="bento reveal">
+      <div class="bento-card dark">
+        <p class="bento-tag light">System 01</p>
+        <h3 class="h-card-light">CV screened and scored<br>before you open your inbox.</h3>
+        <p class="body-light">Every inbound application is parsed by AI, scored 1-10 on genuine fit, and logged to your CRM automatically. No more keyword guessing.</p>
+        <a href="https://calendly.com/hello-nudgeops/30min" class="btn-outline-dark">Book a free call</a>
+      </div>
+      <div class="bento-card dark">
+        <p class="bento-tag light">System 02</p>
+        <h3 class="h-card-light">Candidate followed up<br>in under 2 minutes.</h3>
+        <p class="body-light">Shortlisted candidates get a personalised response automatically. No manual email. No leads going cold while you're on a call.</p>
+        <a href="https://calendly.com/hello-nudgeops/30min" class="btn-outline-dark">Book a free call</a>
+      </div>
+      <div class="bento-card dark">
+        <p class="bento-tag light">System 03</p>
+        <h3 class="h-card-light">Interview scheduled.<br>Both sides confirmed.</h3>
+        <p class="body-light">Availability checked, calendar invite sent, reminders fired. No back and forth. No no-shows. The whole coordination happens automatically.</p>
+        <a href="https://calendly.com/hello-nudgeops/30min" class="btn-outline-dark">Book a free call</a>
+      </div>
+      <div class="bento-card dark">
+        <p class="bento-tag light">System 04</p>
+        <h3 class="h-card-light">Your ATS, LinkedIn and email.<br>Finally connected.</h3>
+        <p class="body-light">We connect your existing tools so candidate data flows automatically between systems. No manual data entry. Complete pipeline visibility.</p>
+        <a href="https://calendly.com/hello-nudgeops/30min" class="btn-outline-dark">Book a free call</a>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ── COUNTERS: Stripe animated count-up ── -->
+<section class="counters-section">
+  <div class="counters-grid">
+    <div class="counter-cell">
+      <span class="counter-num" data-target="14" data-suffix=" days">0</span>
+      <div class="counter-label">Average time to go live</div>
+    </div>
+    <div class="counter-cell">
+      <span class="counter-num" data-target="60" data-suffix="-day">0</span>
+      <div class="counter-label">ROI guarantee</div>
+    </div>
+    <div class="counter-cell">
+      <span class="counter-num" data-target="10" data-suffix="+ hrs">0</span>
+      <div class="counter-label">Admin eliminated per client, per week</div>
+    </div>
+  </div>
+</section>
+
+<!-- ── TOOLS STRIP: built on tools you already use ── -->
+<div class="tools-strip">
+  <div class="container">
+    <p class="tools-label">Built on the tools your team already uses — zero new software to learn</p>
+    <div class="tools-grid">
+
+      <!-- Gmail -->
+      <div class="tool-card">
+        <div class="tool-card-icon" style="background:#fff1f0;">
+          <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 48 48" width="32" height="32">
+            <path fill="#4caf50" d="M45,16.2l-5,2.75l-5,4.75L35,40h7c1.657,0,3-1.343,3-3V16.2z"/>
+            <path fill="#1e88e5" d="M3,16.2l3.614,1.71L13,23.7V40H6c-1.657,0-3-1.343-3-3V16.2z"/>
+            <polygon fill="#e53935" points="35,11.2 24,19.45 13,11.2 12,17 13,23.7 24,31.95 35,23.7 36,17"/>
+            <path fill="#c62828" d="M3,12.298V16.2l10,7.5V11.2L9.876,8.859C9.132,8.301,8.228,8,7.298,8h0 C4.924,8,3,9.924,3,12.298z"/>
+            <path fill="#fbc02d" d="M45,12.298V16.2l-10,7.5V11.2l3.124-2.341C38.868,8.301,39.772,8,40.702,8h0 C43.076,8,45,9.924,45,12.298z"/>
+          </svg>
+        </div>
+        <span class="tool-card-name">Gmail</span>
+      </div>
+
+      <!-- Google Calendar -->
+      <div class="tool-card">
+        <div class="tool-card-icon" style="background:#f0f4ff;">
+          <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 48 48" width="32" height="32">
+            <rect width="22" height="22" x="13" y="13" fill="#fff"/>
+            <polygon fill="#1e88e5" points="25,30 14,30 14,22 25,22"/>
+            <polygon fill="#1565c0" points="39,30 25,30 25,22 39,22"/>
+            <rect width="26" height="8" x="13" y="30" fill="#4caf50"/>
+            <polygon fill="#1e88e5" points="39,14 39,22 25,22 25,14"/>
+            <rect width="12" height="8" x="13" y="14" fill="#ff7043"/>
+            <rect width="26" height="3" x="13" y="38" fill="#388e3c"/>
+            <rect width="26" height="3" x="13" y="14" fill="#e53935"/>
+            <rect width="3" height="26" x="13" y="13" fill="#e53935"/>
+            <rect width="3" height="26" x="36" y="13" fill="#1565c0"/>
+            <polygon fill="#1565c0" points="25,22 39,22 39,19 25,19"/>
+            <polygon fill="#ff5722" points="13,22 25,22 25,19 13,19"/>
+            <rect width="3" height="26" x="13" y="13" fill="#e53935"/>
+            <path fill="#1e88e5" d="M34,42h4c1.1,0,2-0.9,2-2v-2h-6V42z"/>
+            <path fill="#4caf50" d="M8,38v2c0,1.1,0.9,2,2,2h4v-4H8z"/>
+            <path fill="#e53935" d="M14,8h-2c-1.1,0-2,0.9-2,2v2h4V8z"/>
+            <path fill="#1565c0" d="M38,8h-4v4h6v-2C40,8.9,39.1,8,38,8z"/>
+            <rect width="26" height="4" x="14" y="8" fill="#ff7043"/>
+            <rect width="4" height="26" x="8" y="14" fill="#4caf50"/>
+            <rect width="4" height="26" x="36" y="14" fill="#1e88e5"/>
+            <rect width="26" height="4" x="14" y="36" fill="#388e3c"/>
+            <circle cx="18" cy="10" r="2" fill="#fff"/>
+            <circle cx="34" cy="10" r="2" fill="#fff"/>
+          </svg>
+        </div>
+        <span class="tool-card-name">Google Cal</span>
+      </div>
+
+      <!-- Make.com -->
+      <div class="tool-card">
+        <div class="tool-card-icon" style="background:#f5f0ff;">
+          <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 48 48" width="32" height="32">
+            <circle cx="10" cy="24" r="7" fill="#6D00CC"/>
+            <circle cx="38" cy="24" r="7" fill="#6D00CC"/>
+            <circle cx="24" cy="10" r="7" fill="#9B30FF"/>
+            <circle cx="24" cy="38" r="7" fill="#9B30FF"/>
+            <rect x="17" y="22.5" width="14" height="3" rx="1.5" fill="#6D00CC"/>
+            <rect x="22.5" y="17" width="3" height="14" rx="1.5" fill="#9B30FF"/>
+          </svg>
+        </div>
+        <span class="tool-card-name">Make.com</span>
+      </div>
+
+      <!-- n8n -->
+      <div class="tool-card">
+        <div class="tool-card-icon" style="background:#fff0f4;">
+          <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 48 48" width="32" height="32">
+            <circle cx="8" cy="24" r="6" fill="#EA4B71"/>
+            <circle cx="24" cy="8" r="6" fill="#EA4B71"/>
+            <circle cx="40" cy="24" r="6" fill="#EA4B71"/>
+            <circle cx="24" cy="40" r="6" fill="#FF6B8A"/>
+            <line x1="13" y1="21" x2="19" y2="13" stroke="#EA4B71" stroke-width="2.5" stroke-linecap="round"/>
+            <line x1="29" y1="13" x2="35" y2="21" stroke="#EA4B71" stroke-width="2.5" stroke-linecap="round"/>
+            <line x1="35" y1="27" x2="29" y2="35" stroke="#EA4B71" stroke-width="2.5" stroke-linecap="round"/>
+            <line x1="19" y1="35" x2="13" y2="27" stroke="#FF6B8A" stroke-width="2.5" stroke-linecap="round"/>
+          </svg>
+        </div>
+        <span class="tool-card-name">n8n</span>
+      </div>
+
+      <!-- Airtable -->
+      <div class="tool-card">
+        <div class="tool-card-icon" style="background:#fffbf0;">
+          <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 48 48" width="32" height="32">
+            <path fill="#FCB400" d="M22.2,5.4l-17,7.1c-1.2,0.5-1.2,2.2,0,2.7l17.1,7c1.1,0.5,2.4,0.5,3.5,0l17.1-7 c1.2-0.5,1.2-2.2,0-2.7l-17-7.1C24.8,4.9,23.2,4.9,22.2,5.4z"/>
+            <path fill="#18BFFF" d="M25.5,25.6v16.2c0,1.3,1.3,2.1,2.5,1.6l19-7.9c0.7-0.3,1.2-1,1.2-1.8V17.5c0-1.3-1.3-2.1-2.5-1.6 l-19,7.9C26,24.1,25.5,24.8,25.5,25.6z"/>
+            <path fill="#F82B60" d="M21.7,26.3L6.6,18.5c-0.5-0.3-1.1-0.2-1.5,0.1L0.9,21c-0.6,0.5-0.6,1.4,0,1.8l14.7,9.3 c0.5,0.3,1.2,0.3,1.7,0l4.4-4.4C22.3,27.2,22.3,26.6,21.7,26.3z M21.7,26.3"/>
+          </svg>
+        </div>
+        <span class="tool-card-name">Airtable</span>
+      </div>
+
+      <!-- OpenAI -->
+      <div class="tool-card">
+        <div class="tool-card-icon" style="background:#f5f5f5;">
+          <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 48 48" width="32" height="32">
+            <path fill="#1D1D1F" d="M44.1,19.8c0.5-1.6,0.5-3.3,0-4.9c-0.5-1.6-1.5-3-2.9-4c-1.3-1-3-1.6-4.7-1.6 c-0.8-1.4-2-2.5-3.4-3.2C31.7,5.4,30.1,5,28.5,5c-1.5,0-3,0.4-4.3,1.1c-1.3,0.7-2.4,1.8-3.1,3.1c-1.6,0-3.2,0.5-4.6,1.4 c-1.3,0.9-2.3,2.2-2.9,3.7c-0.6,1.5-0.7,3.1-0.4,4.7c-1.2,0.9-2.1,2.1-2.7,3.5c-0.6,1.4-0.7,2.9-0.5,4.4 c0.2,1.5,0.9,2.9,1.8,4c0.9,1.1,2.2,2,3.6,2.4c0.3,1.6,1,3,2.1,4.2c1.1,1.2,2.5,2,4,2.4c1.5,0.4,3.1,0.3,4.6-0.2 c1-0.3,1.9-0.8,2.7-1.5c0.8,0.7,1.7,1.2,2.7,1.5c1.5,0.5,3.1,0.5,4.6,0.2c1.5-0.4,2.9-1.2,4-2.4c1.1-1.2,1.8-2.6,2.1-4.2 c1.4-0.4,2.7-1.3,3.6-2.4c0.9-1.1,1.6-2.5,1.8-4c0.2-1.5,0.1-3-0.5-4.4C46.1,21.9,45.3,20.7,44.1,19.8z M30.7,37.7 c-1.2,0.4-2.5,0.3-3.7-0.2c-0.6-0.2-1.1-0.6-1.5-1c0.1-0.1,0.3-0.2,0.4-0.3l6.1-3.5c0.3-0.2,0.5-0.5,0.5-0.8V24l2.6,1.5 c0,0,0,0.1,0,0.1v7.1C35.1,35.1,33.2,36.9,30.7,37.7z M12.8,31.7c-0.6-1.1-0.8-2.4-0.5-3.6c0.1,0.1,0.3,0.2,0.4,0.3l6.1,3.5 c0.3,0.2,0.6,0.2,0.9,0l7.4-4.3v3c0,0,0,0.1,0,0.1l-6.2,3.6C18,35.7,15,34.7,12.8,31.7z M11.1,17.7c0.6-1.1,1.6-2,2.7-2.5 c0,0.1,0,0.3,0,0.4v7c0,0.3,0.2,0.7,0.5,0.8l7.4,4.3l-2.6,1.5c0,0-0.1,0-0.1,0l-6.1-3.5C10.5,23.2,9.9,20.1,11.1,17.7z M39.2,25.9l-6.1-3.5l2.6-1.5c0,0,0.1,0,0.1,0l6.1,3.5c2.5,1.4,3.2,4.6,1.5,7c-0.6,0.9-1.4,1.5-2.4,1.9c0-0.1,0-0.3,0-0.4v-7 C41,26.5,40.1,26.1,39.2,25.9C39.2,25.9,39.2,25.9,39.2,25.9z M40.8,19.7c-0.1-0.1-0.3-0.2-0.4-0.3l-6.1-3.5 c-0.3-0.2-0.6-0.2-0.9,0l-7.4,4.3v-3c0,0,0-0.1,0-0.1l6.2-3.6c2.9-1.6,6.5-0.6,8.1,2.3C40.8,16.8,41.1,18.3,40.8,19.7z M23,21.5l-2.6-1.5v-7.1c0,0,0-0.1,0-0.1c1.7-2.9,5.4-3.9,8.3-2.3c1,0.6,1.8,1.4,2.2,2.5c-0.1,0-0.3,0.1-0.4,0.2l-6.1,3.5 c-0.3,0.2-0.5,0.5-0.5,0.8L23,21.5z M24.4,18.9l3.3-1.9l3.3,1.9v3.8l-3.3,1.9l-3.3-1.9V18.9z"/>
+          </svg>
+        </div>
+        <span class="tool-card-name">OpenAI</span>
+      </div>
+
+      <!-- Zapier -->
+      <div class="tool-card">
+        <div class="tool-card-icon" style="background:#fff5f0;">
+          <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 48 48" width="32" height="32">
+            <path fill="#FF4A00" d="M24,4C13,4,4,13,4,24s9,20,20,20s20-9,20-20S35,4,24,4z M32.9,29H26v6.9c0,1.1-0.9,2-2,2 s-2-0.9-2-2V29h-6.9c-1.1,0-2-0.9-2-2s0.9-2,2-2H22v-6.9c0-1.1,0.9-2,2-2s2,0.9,2,2V25h6.9c1.1,0,2,0.9,2,2 S34,29,32.9,29z"/>
+          </svg>
+        </div>
+        <span class="tool-card-name">Zapier</span>
+      </div>
+
+      <!-- Calendly -->
+      <div class="tool-card">
+        <div class="tool-card-icon" style="background:#f0f5ff;">
+          <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 48 48" width="32" height="32">
+            <circle cx="24" cy="24" r="20" fill="#006BFF"/>
+            <path fill="#fff" d="M24,12c-6.6,0-12,5.4-12,12s5.4,12,12,12s12-5.4,12-12S30.6,12,24,12z M24,34 c-5.5,0-10-4.5-10-10s4.5-10,10-10s10,4.5,10,10S29.5,34,24,34z"/>
+            <path fill="#fff" d="M25,17h-2v8l5.2,5.2l1.4-1.4L25,24.2V17z"/>
+          </svg>
+        </div>
+        <span class="tool-card-name">Calendly</span>
+      </div>
+
+      <!-- Notion -->
+      <div class="tool-card">
+        <div class="tool-card-icon" style="background:#f5f5f5;">
+          <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 48 48" width="32" height="32">
+            <path fill="#fff" d="M8,6h26c1.1,0,2,0.9,2,2v28l-8,6H8c-1.1,0-2-0.9-2-2V8C6,6.9,6.9,6,8,6z"/>
+            <path fill="#1D1D1F" d="M28,42l8-6V8c0-1.1-0.9-2-2-2H8C6.9,6,6,6.9,6,8v32c0,1.1,0.9,2,2,2H28z M28,42l8-6h-8V42z"/>
+            <path fill="#fff" d="M15,14h12v2H15V14z M15,20h12v2H15V20z M15,26h8v2h-8V26z"/>
+          </svg>
+        </div>
+        <span class="tool-card-name">Notion</span>
+      </div>
+
+    </div>
+  </div>
+</div>
+
+<!-- ── FULL STACK CTA ── -->
+<section class="section-mid">
+  <div class="container">
+    <p class="section-label-light">The complete stack</p>
+    <h2 class="h-section-light">From inbound CV<br>to placed candidate. Automated.</h2>
+    <p class="body-light" style="max-width:480px;margin:0 auto 36px;">Lead follow-up, meeting booking, client onboarding and full CRM — built and integrated together. Live in 14 days.</p>
+    <div class="btn-row" style="justify-content:center;">
+      <a href="https://calendly.com/hello-nudgeops/30min" class="btn-blue">Book a free call</a>
+      <a href="#how" class="btn-outline-dark">See how it works</a>
+    </div>
+  </div>
+</section>
+
+<!-- ── HOW IT WORKS: Apple 3-col + Stripe card borders + hover lift ── -->
+<section class="section-light" id="how">
+  <div class="container">
+    <p class="section-label">How it works</p>
+    <h2 class="h-section-dark">Live in 14 days.<br>Your ATS stays. We connect everything.</h2>
+    <p class="body-dark" style="max-width:480px;margin:0 auto;">We handle everything. You carry on working exactly as you do now.</p>
+    <div class="three-col reveal">
+      <div class="col-card">
+        <div class="col-num">01</div>
+        <h3 class="h-card-dark">Discovery call</h3>
+        <p class="body-dark">A free 20-minute call where we map how your business runs — how leads come in, how you book calls, how you onboard clients. No pitch. Just a clear picture of where the leaks are.</p>
+      </div>
+      <div class="col-card">
+        <div class="col-num">02</div>
+        <h3 class="h-card-dark">We build everything</h3>
+        <p class="body-dark">We design and build your systems in 5–7 working days. You don't touch a thing. We test every scenario and only go live when it's working perfectly.</p>
+      </div>
+      <div class="col-card">
+        <div class="col-num">03</div>
+        <h3 class="h-card-dark">You go live</h3>
+        <p class="body-dark">30-minute handover call. From that moment it runs 24/7. 60 days of results or we refund you in full — no questions asked.</p>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ── WHO IT'S FOR: Stripe accordion ── -->
+<section class="section-white" id="who">
+  <div class="container">
+    <p class="section-label">Who it's for</p>
+    <h2 class="h-section-dark">Built for recruitment agencies<br>ready to scale without hiring.</h2>
+    <p class="body-dark" style="max-width:480px;margin:0 auto;">If you're managing leads, calls and clients manually — this is built for you.</p>
+
+    <div class="accordion reveal">
+
+      <div class="accordion-item open">
+        <button class="accordion-trigger" aria-expanded="true">
+          <span class="accordion-title">Recruitment Agencies</span>
+          <span class="accordion-icon">+</span>
+        </button>
+        <div class="accordion-body">
+          <div class="accordion-body-inner">
+            <div>
+              <p class="body-dark">Placement fees lost to slow follow-up. Candidates going cold. Interviews hard to schedule. We automate your entire candidate and client pipeline so no placement fee is ever lost to a slow response.</p>
+              <a href="https://calendly.com/hello-nudgeops/30min" class="btn-outline-light" style="margin-top:24px;display:inline-block;">Book a free call</a>
+            </div>
+            <ul class="accordion-pain-list">
+              <li>Candidate follow-up done manually</li>
+              <li>Interview scheduling back and forth</li>
+              <li>No CRM to track the pipeline</li>
+              <li>Client onboarding taking hours</li>
+            </ul>
+          </div>
+        </div>
+      </div>
+
+      <div class="accordion-item">
+        <button class="accordion-trigger" aria-expanded="false">
+          <span class="accordion-title">Independent Recruiters</span>
+          <span class="accordion-icon">+</span>
+        </button>
+        <div class="accordion-body">
+          <div class="accordion-body-inner">
+            <div>
+              <p class="body-dark">Enquiries going cold while you're on calls. Discovery calls hard to book. New clients onboarded manually. We build systems so your business runs between sessions without you in the middle.</p>
+              <a href="https://calendly.com/hello-nudgeops/30min" class="btn-outline-light" style="margin-top:24px;display:inline-block;">Book a free call</a>
+            </div>
+            <ul class="accordion-pain-list">
+              <li>Leads not followed up fast enough</li>
+              <li>Discovery call booking is painful</li>
+              <li>Onboarding new clients takes hours</li>
+              <li>No visibility of pipeline or revenue</li>
+            </ul>
+          </div>
+        </div>
+      </div>
+
+      <div class="accordion-item">
+        <button class="accordion-trigger" aria-expanded="false">
+          <span class="accordion-title">Specialist Staffing Firms</span>
+          <span class="accordion-icon">+</span>
+        </button>
+        <div class="accordion-body">
+          <div class="accordion-body-inner">
+            <div>
+              <p class="body-dark">Sales pipeline dies when you're heads down on delivery. New business lost because nobody followed up. Onboarding inconsistent. We remove the founder bottleneck from your entire front end.</p>
+              <a href="https://calendly.com/hello-nudgeops/30min" class="btn-outline-light" style="margin-top:24px;display:inline-block;">Book a free call</a>
+            </div>
+            <ul class="accordion-pain-list">
+              <li>Feast and famine sales cycle</li>
+              <li>Proposals sent, never followed up</li>
+              <li>Inconsistent client onboarding</li>
+              <li>Founder doing all the admin</li>
+            </ul>
+          </div>
+        </div>
+      </div>
+
+    </div>
+  </div>
+</section>
+
+<!-- ── FAQ ── -->
+<section class="faq-section" id="faq">
+  <div class="container">
+    <p class="section-label">FAQ</p>
+    <h2 class="h-section-dark">Questions we get asked<br>before every call.</h2>
+    <p class="body-dark" style="max-width:480px;margin:0 auto;">Everything you want to know before booking.</p>
+    <div class="faq-grid reveal">
+
+      <div class="faq-item open">
+        <button class="faq-trigger" aria-expanded="true">
+          <span class="faq-question">How long does it actually take to go live?</span>
+          <span class="faq-icon">+</span>
+        </button>
+        <div class="faq-body">
+          <div class="faq-body-inner">14 days from our kick-off call to your systems being live. We handle the build entirely — you just need to be available for a 30-minute onboarding and a 30-minute handover. That's it.</div>
+        </div>
+      </div>
+
+      <div class="faq-item">
+        <button class="faq-trigger" aria-expanded="false">
+          <span class="faq-question">Do I need to learn any new tools?</span>
+          <span class="faq-icon">+</span>
+        </button>
+        <div class="faq-body">
+          <div class="faq-body-inner">No. We build everything around the tools you already use — Gmail, WhatsApp, Google Calendar, and others. Your team won't need to change how they work or log into a new platform.</div>
+        </div>
+      </div>
+
+      <div class="faq-item">
+        <button class="faq-trigger" aria-expanded="false">
+          <span class="faq-question">What if it doesn't work for my business?</span>
+          <span class="faq-icon">+</span>
+        </button>
+        <div class="faq-body">
+          <div class="faq-body-inner">We offer a 60-day ROI guarantee. If your systems don't generate a clear, measurable return within 60 days of going live, we refund you in full. No questions asked.</div>
+        </div>
+      </div>
+
+      <div class="faq-item">
+        <button class="faq-trigger" aria-expanded="false">
+          <span class="faq-question">Will it disrupt how my business currently runs?</span>
+          <span class="faq-icon">+</span>
+        </button>
+        <div class="faq-body">
+          <div class="faq-body-inner">No disruption. We build and test everything in the background. You carry on working as normal. We only go live once everything is working perfectly — and we stay on for the first week to make sure it runs smoothly.</div>
+        </div>
+      </div>
+
+      <div class="faq-item">
+        <button class="faq-trigger" aria-expanded="false">
+          <span class="faq-question">What kinds of businesses do you work with?</span>
+          <span class="faq-icon">+</span>
+        </button>
+        <div class="faq-body">
+          <div class="faq-body-inner">Recruitment agencies and independent recruiters generating £5k–£50k/month. Typically 1-20 person teams who are managing CV screening, candidate follow-up, and interview scheduling manually. If your recruiters are spending more than 2 hours a day on admin, we can help.</div>
+        </div>
+      </div>
+
+      <div class="faq-item">
+        <button class="faq-trigger" aria-expanded="false">
+          <span class="faq-question">What does it cost?</span>
+          <span class="faq-icon">+</span>
+        </button>
+        <div class="faq-body">
+          <div class="faq-body-inner">We have three options: a £500 Starter system, a £2,000 full Growth Stack (all four systems), and a £350/month retainer for ongoing management and optimisation. We'll recommend the right fit on your free call.</div>
+        </div>
+      </div>
+
+      <div class="faq-item">
+        <button class="faq-trigger" aria-expanded="false">
+          <span class="faq-question">How much of my time does this take?</span>
+          <span class="faq-icon">+</span>
+        </button>
+        <div class="faq-body">
+          <div class="faq-body-inner">About one hour total. A 30-minute kick-off call and a 30-minute handover call. Everything in between is handled by us.</div>
+        </div>
+      </div>
+
+      <div class="faq-item">
+        <button class="faq-trigger" aria-expanded="false">
+          <span class="faq-question">What happens after it's live?</span>
+          <span class="faq-icon">+</span>
+        </button>
+        <div class="faq-body">
+          <div class="faq-body-inner">Your systems run 24/7 without you touching anything. We stay available for the first 60 days to fix anything that needs adjusting. After that, our retainer keeps everything optimised and up to date as your business grows.</div>
+        </div>
+      </div>
+
+    </div>
+  </div>
+</section>
+
+<!-- ── GUARANTEE: risk reversal ── -->
+<section class="section-white" style="padding:80px 0;">
+  <div class="container" style="max-width:700px;">
+    <div style="background:var(--bg-light);border-radius:var(--radius-tile);padding:48px 40px;border:1px solid var(--stripe-card-border-light);text-align:center;">
+      <div style="font-size:40px;margin-bottom:16px;">🔒</div>
+      <p class="section-label">Our guarantee</p>
+      <h2 class="h-section-dark" style="font-size:clamp(28px,3vw,40px);margin-bottom:16px;">60-day ROI guarantee.<br>Or you pay nothing.</h2>
+      <p class="body-dark" style="max-width:480px;margin:0 auto;">If your automation systems don't generate a clear, measurable return within 60 days of going live, we refund you in full. No questions asked. No hoops to jump through. We only win when you win.</p>
+    </div>
+  </div>
+</section>
+
+<!-- ── FINAL CTA ── -->
+<section class="section-dark">
+  <div class="container">
+    <p class="section-label-light">One call. That's all it takes.</p>
+    <h2 class="h-section-light">Find out exactly how many<br>placements you're missing.</h2>
+    <p class="body-light" style="max-width:500px;margin:0 auto 12px;">Book a free 30-minute call. We'll map your current screening and follow-up process, show you exactly where candidates are falling through the cracks, and tell you what we'd build to fix it. No pitch. No pressure.</p>
+    <p class="body-light" style="max-width:460px;margin:0 auto 36px;font-size:15px;opacity:0.7;">If we can't show you a clear ROI in 60 days, you pay nothing.</p>
+    <div class="btn-row" style="justify-content:center;">
+      <a href="https://calendly.com/hello-nudgeops/30min" class="btn-blue" style="font-size:19px;padding:16px 32px;">Book your free call →</a>
+    </div>
+    <p style="font-size:12px;margin-top:20px;color:var(--text-body-light);opacity:0.6;">Free · No obligation · Live in 14 days or you don't pay</p>
+  </div>
+</section>
+
+<!-- ── FOOTER ── -->
+<footer>
+  <div class="container">
+    <div class="footer-nav">
+      <a href="#systems">Systems</a>
+      <a href="#how">How it works</a>
+      <a href="#who">Who it's for</a>
+      <a href="#faq">FAQ</a>
+      <a href="https://calendly.com/hello-nudgeops/30min">Book a free call</a>
+      <a href="mailto:hello@nudgeops.co.uk">Contact</a>
+    </div>
+    <div class="footer-copy">
+      <span>Copyright © 2026 NudgeOps. All rights reserved.</span>
+      <span>
+        <a href="#" class="text-link" style="margin-right:16px;">Privacy Policy</a>
+        <a href="#" class="text-link">Terms of Use</a>
+      </span>
+    </div>
+  </div>
+</footer>
+
+<script>
+/* ── 1. NAV: switches to dark when hero leaves viewport ── */
+const nav = document.getElementById('main-nav');
+const hero = document.getElementById('top');
+const heroObs = new IntersectionObserver(([e]) => {
+  nav.classList.toggle('dark-nav', !e.isIntersecting);
+}, { threshold: 0.05 });
+heroObs.observe(hero);
+
+/* ── 2. SCROLL REVEAL: Stripe fade-up on enter ── */
+const revealObs = new IntersectionObserver((entries) => {
+  entries.forEach((e, i) => {
+    if (e.isIntersecting) {
+      setTimeout(() => e.target.classList.add('visible'), i * 80);
+      revealObs.unobserve(e.target);
+    }
+  });
+}, { threshold: 0.1 });
+document.querySelectorAll('.reveal').forEach(el => revealObs.observe(el));
+
+/* ── 3. ANIMATED COUNTERS: count up on scroll into view ── */
+function animateCounter(el) {
+  const target = parseInt(el.dataset.target);
+  const suffix = el.dataset.suffix || '';
+  const duration = 1200;
+  const step = target / (duration / 16);
+  let current = 0;
+  const timer = setInterval(() => {
+    current += step;
+    if (current >= target) {
+      current = target;
+      clearInterval(timer);
+    }
+    el.textContent = Math.floor(current) + suffix;
+  }, 16);
+}
+
+const counterObs = new IntersectionObserver((entries) => {
+  entries.forEach(e => {
+    if (e.isIntersecting) {
+      animateCounter(e.target);
+      counterObs.unobserve(e.target);
+    }
+  });
+}, { threshold: 0.5 });
+document.querySelectorAll('.counter-num[data-target]').forEach(el => counterObs.observe(el));
+
+/* ── 4. STICKY TABS: highlight active section on scroll ── */
+const sections = ['systems','how','who','faq'];
+const tabLinks = document.querySelectorAll('.tab-link');
+
+const sectionObs = new IntersectionObserver((entries) => {
+  entries.forEach(e => {
+    if (e.isIntersecting) {
+      tabLinks.forEach(t => {
+        t.classList.toggle('active', t.dataset.section === e.target.id);
+      });
+    }
+  });
+}, { rootMargin: '-40% 0px -40% 0px', threshold: 0 });
+
+sections.forEach(id => {
+  const el = document.getElementById(id);
+  if (el) sectionObs.observe(el);
+});
+
+/* ── 5. ACCORDION: expand/collapse ── */
+document.querySelectorAll('.accordion-trigger').forEach(trigger => {
+  trigger.addEventListener('click', () => {
+    const item = trigger.closest('.accordion-item');
+    const body = item.querySelector('.accordion-body');
+    const isOpen = item.classList.contains('open');
+
+    // Close all
+    document.querySelectorAll('.accordion-item').forEach(i => {
+      i.classList.remove('open');
+      i.querySelector('.accordion-body').style.maxHeight = '0';
+      i.querySelector('.accordion-trigger').setAttribute('aria-expanded', 'false');
+    });
+
+    // Open clicked if it was closed
+    if (!isOpen) {
+      item.classList.add('open');
+      body.style.maxHeight = body.scrollHeight + 'px';
+      trigger.setAttribute('aria-expanded', 'true');
+    }
+  });
+});
+
+// Init first accordion open
+const firstBody = document.querySelector('.accordion-item.open .accordion-body');
+if (firstBody) firstBody.style.maxHeight = firstBody.scrollHeight + 'px';
+
+/* ── 6. FAQ: expand/collapse ── */
+document.querySelectorAll('.faq-trigger').forEach(trigger => {
+  trigger.addEventListener('click', () => {
+    const item = trigger.closest('.faq-item');
+    const body = item.querySelector('.faq-body');
+    const isOpen = item.classList.contains('open');
+
+    document.querySelectorAll('.faq-item').forEach(i => {
+      i.classList.remove('open');
+      i.querySelector('.faq-body').style.maxHeight = '0';
+      i.querySelector('.faq-trigger').setAttribute('aria-expanded', 'false');
+    });
+
+    if (!isOpen) {
+      item.classList.add('open');
+      body.style.maxHeight = body.scrollHeight + 'px';
+      trigger.setAttribute('aria-expanded', 'true');
+    }
+  });
+});
+
+const firstFaqBody = document.querySelector('.faq-item.open .faq-body');
+if (firstFaqBody) firstFaqBody.style.maxHeight = firstFaqBody.scrollHeight + 'px';
+</script>
+</body>
+</html>
